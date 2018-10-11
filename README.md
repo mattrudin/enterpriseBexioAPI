@@ -1,1 +1,1 @@
-Bexio API für Messag AG
+Bexio API für Enterprisebenutzung
