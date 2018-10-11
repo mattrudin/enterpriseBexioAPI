@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './TimeSheetForm.css';
 
 class TimeSheetForm extends Component {
-  getTimesheets() {
-    const http = new XMLHttpRequest();
+  postTimesheets() {
+    /*     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
     const url = `${baseUrl}${this.state.Organisation}/timesheet`;
     http.open('GET', url, true);
@@ -17,7 +17,7 @@ class TimeSheetForm extends Component {
       }
     };
 
-    http.send();
+    http.send(); */
   }
 
   render() {

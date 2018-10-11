@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import ArticleShow from './components/ArticleShow/ArticleShow';
+import ArticleForm from './components/ArticleForm/ArticleForm';
+import TimeSheetShow from './components/TimeSheetShow/TimeSheetShow';
+import TimeShetForm from './components/TimeSheetForm/TimeSheetForm';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+
+    state = {
+      Login: false,
       ClientID: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       ClientSecret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       State: '',
@@ -13,54 +16,8 @@ class App extends Component {
       Organisation: '',
     };
 
-    this.generateState = this.generateState.bind(this);
-    this.goLogin = this.goLogin.bind(this);
-    this.getAccess = this.getAccess.bind(this);
-    this.getAccessToken = this.getAccessToken.bind(this);
-    this.getArticles = this.getArticles.bind(this);
-    this.getTimesheets = this.getTimesheets.bind(this);
-  }
-
   componentDidMount() {
     this.timerID = setInterval(() => this.getAccess(), 1000);
-  }
-
-  generateState() {
-    const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const UintArray = new Uint8Array(40);
-    window.crypto.getRandomValues(UintArray);
-    const array = UintArray.map(x => validChars.charCodeAt(x % validChars.length));
-    const randomState = String.fromCharCode.apply(null, array);
-    this.setState(
-      {
-        State: randomState,
-      },
-      () => console.log('state', this.state.State)
-    ); // console.log does work
-    return randomState;
-  }
-
-  goLogin() {
-    const http = new XMLHttpRequest();
-    const url = 'https://office.bexio.com/oauth/authorize';
-    const redirect_uri = 'http://localhost:3000/';
-    const state = this.generateState();
-    const scope = 'article_show monitoring_show';
-
-    const params = `client_id=${
-      this.state.ClientID
-    }&redirect_uri=${redirect_uri}&state=${state}&scope=${scope}`;
-
-    http.open('GET', url, true);
-
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    http.onreadystatechange = () => {
-      if (http.readyState === 4 && http.status === 200) {
-        window.location = `${url}?${params}`;
-      }
-    };
-    http.send(params);
   }
 
   getAccess() {
@@ -95,6 +52,7 @@ class App extends Component {
         const accessToken = json.access_token;
         const organisation = json.org;
         this.setState({
+          Login: true,
           AccessToken: accessToken,
           Organisation: organisation,
         });
@@ -104,12 +62,56 @@ class App extends Component {
     http.send(params);
   }
 
+  goLogin() {
+    const http = new XMLHttpRequest();
+    const url = 'https://office.bexio.com/oauth/authorize';
+    const redirect_uri = 'http://localhost:3000/';
+    const state = () => this.generateState();
+    const scope = 'article_show monitoring_show';
+
+    const params = `client_id=${
+      this.state.ClientID
+    }&redirect_uri=${redirect_uri}&state=${state}&scope=${scope}`;
+
+    http.open('GET', url, true);
+
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    http.onreadystatechange = () => {
+      if (http.readyState === 4 && http.status === 200) {
+        window.location = `${url}?${params}`;
+      }
+    };
+    http.send(params);
+  }
+
+  generateState() {
+    const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const UintArray = new Uint8Array(40);
+    window.crypto.getRandomValues(UintArray);
+    const array = UintArray.map(x => validChars.charCodeAt(x % validChars.length));
+    const randomState = String.fromCharCode.apply(null, array);
+    this.setState(
+      {
+        State: randomState,
+      },
+      () => console.log('state', this.state.State)
+    ); // console.log does work
+    return randomState;
+  }
+
   render() {
     return (
-      <div className="App">
-        <button className="button" onClick={this.goLogin}>
+      <div className="App" >
+        <button className="button" type="button" onClick={() => this.goLogin}>
           Login to Bexio
         </button>
+		<div className="container">
+			<ArticleShow />
+			<ArticleForm />
+			<TimeSheetShow />
+			<TimeShetForm />
+		</div>
       </div>
     );
   }

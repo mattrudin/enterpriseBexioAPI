@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './ArticleForm.css';
 
 class ArticleForm extends Component {
-  getArticles() {
-    const http = new XMLHttpRequest();
+  postArticle() {
+    /* const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
     const url = `${baseUrl}${this.state.Organisation}/article`;
     http.open('GET', url, true);
@@ -17,7 +17,7 @@ class ArticleForm extends Component {
       }
     };
 
-    http.send();
+    http.send(); */
   }
 
   render() {
