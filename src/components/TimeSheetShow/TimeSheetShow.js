@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import './TimeSheetForm.css';
 
 class TimeSheetForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeSheets: [],
+    };
+  }
+
   getTimesheets() {
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
@@ -13,7 +20,9 @@ class TimeSheetForm extends Component {
     http.onreadystatechange = function() {
       if (http.readyState === 4 && http.status === 200) {
         const timeSheets = JSON.parse(http.responseText);
-        console.log(timeSheets);
+        this.setState({
+          timeSheets,
+        });
       }
     };
 
@@ -23,7 +32,10 @@ class TimeSheetForm extends Component {
   render() {
     return (
       <div>
-        <p>show timesheets</p>
+        <button onClick={this.getTimesheets}>Get Articles</button>
+        <pre>
+          <code>{JSON.stringify(this.state.timeSheets, null, 4)}</code>
+        </pre>
       </div>
     );
   }
