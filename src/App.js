@@ -4,17 +4,23 @@ import ArticleShow from './components/ArticleShow/ArticleShow';
 import ArticleForm from './components/ArticleForm/ArticleForm';
 import TimeSheetShow from './components/TimeSheetShow/TimeSheetShow';
 import TimeShetForm from './components/TimeSheetForm/TimeSheetForm';
+import UserShow from './components/UserShow/UserShow';
+import ProjectShow from './components/ProjectShow/ProjectShow';
+import PackageShow from './components/PackageShow/PackageShow';
 
 class App extends Component {
-
-    state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       Login: false,
-      ClientID: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-      ClientSecret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      ClientID: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      ClientSecret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       State: '',
       AccessToken: '',
       Organisation: '',
     };
+    this.goLogin = this.goLogin.bind(this);
+  }
 
   componentDidMount() {
     this.timerID = setInterval(() => this.getAccess(), 1000);
@@ -66,8 +72,8 @@ class App extends Component {
     const http = new XMLHttpRequest();
     const url = 'https://office.bexio.com/oauth/authorize';
     const redirect_uri = 'http://localhost:3000/';
-    const state = () => this.generateState();
-    const scope = 'article_show monitoring_show';
+    const state = this.generateState();
+    const scope = 'article_show monitoring_show project_show'; // package_show not available
 
     const params = `client_id=${
       this.state.ClientID
@@ -102,16 +108,37 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" >
-        <button className="button" type="button" onClick={() => this.goLogin}>
+      <div className="App">
+        <button className="button" type="button" onClick={this.goLogin}>
           Login to Bexio
         </button>
-		<div className="container">
-			<ArticleShow />
-			<ArticleForm />
-			<TimeSheetShow />
-			<TimeShetForm />
-		</div>
+        <div className="container">
+          <ArticleShow
+            AccessToken={this.state.AccessToken}
+            Organisation={this.state.Organisation}
+          />
+          <ArticleForm
+            AccessToken={this.state.AccessToken}
+            Organisation={this.state.Organisation}
+          />
+          <TimeSheetShow
+            AccessToken={this.state.AccessToken}
+            Organisation={this.state.Organisation}
+          />
+          <TimeShetForm
+            AccessToken={this.state.AccessToken}
+            Organisation={this.state.Organisation}
+          />
+          <UserShow AccessToken={this.state.AccessToken} Organisation={this.state.Organisation} />
+          <ProjectShow
+            AccessToken={this.state.AccessToken}
+            Organisation={this.state.Organisation}
+          />
+          <PackageShow
+            AccessToken={this.state.AccessToken}
+            Organisation={this.state.Organisation}
+          />
+        </div>
       </div>
     );
   }

@@ -28,3 +28,5 @@ class TimeSheetForm extends Component {
     );
   }
 }
+
+export default TimeSheetForm;
