@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import './ArticleShow.css';
 
 class ArticleShow extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      articles: [],
+    };
+  }
+
   getArticles() {
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
@@ -13,7 +20,9 @@ class ArticleShow extends Component {
     http.onreadystatechange = function() {
       if (http.readyState === 4 && http.status === 200) {
         const articles = JSON.parse(http.responseText);
-        console.log(articles);
+        this.setState({
+          articles,
+        });
       }
     };
 
@@ -23,7 +32,10 @@ class ArticleShow extends Component {
   render() {
     return (
       <div>
-        <p>get articles</p>
+        <button onClick={this.getArticles}>Get Articles</button>
+        <pre>
+          <code>{JSON.stringify(this.state.articles, null, 4)}</code>
+        </pre>
       </div>
     );
   }
