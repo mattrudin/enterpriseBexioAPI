@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
-import './ArticleShow.css';
+import './ProjectShow.css';
 
-class ArticleShow extends Component {
+class ProjectShow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: [],
+      projects: [],
     };
-    this.getArticles = this.getArticles.bind(this);
+    this.getProjects = this.getProjects.bind(this);
   }
 
-  getArticles() {
+  getProjects() {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
-    const url = `${baseUrl}${Organisation}/article`;
+    const url = `${baseUrl}${Organisation}/pr_project`;
     http.open('GET', url, true);
     http.setRequestHeader('Accept', 'application/json');
     http.setRequestHeader('Authorization', `Bearer ${AccessToken}`);
 
     http.onreadystatechange = () => {
       if (http.readyState === 4 && http.status === 200) {
-        const articles = JSON.parse(http.responseText);
+        const projects = JSON.parse(http.responseText);
         this.setState({
-          articles,
+          projects,
         });
       }
     };
@@ -34,13 +34,13 @@ class ArticleShow extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.getArticles}>Get Articles</button>
+        <button onClick={this.getProjects}>Get Projects</button>
         <pre>
-          <code>{JSON.stringify(this.state.articles, null, 4)}</code>
+          <code>{JSON.stringify(this.state.projects, null, 4)}</code>
         </pre>
       </div>
     );
   }
 }
 
-export default ArticleShow;
+export default ProjectShow;

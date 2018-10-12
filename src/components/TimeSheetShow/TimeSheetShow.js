@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
-import './TimeSheetForm.css';
+import './TimeSheetShow.css';
 
-class TimeSheetForm extends Component {
+class TimeSheetShow extends Component {
   constructor(props) {
     super(props);
     this.state = {
       timeSheets: [],
     };
+    this.getTimesheets = this.getTimesheets.bind(this);
   }
 
   getTimesheets() {
+    const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
-    const url = `${baseUrl}${this.state.Organisation}/timesheet`;
+    const url = `${baseUrl}${Organisation}/timesheet`;
     http.open('GET', url, true);
     http.setRequestHeader('Accept', 'application/json');
-    http.setRequestHeader('Authorization', `Bearer ${this.state.AccessToken}`);
+    http.setRequestHeader('Authorization', `Bearer ${AccessToken}`);
 
-    http.onreadystatechange = function() {
+    http.onreadystatechange = () => {
       if (http.readyState === 4 && http.status === 200) {
         const timeSheets = JSON.parse(http.responseText);
         this.setState({
@@ -32,7 +34,7 @@ class TimeSheetForm extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.getTimesheets}>Get Articles</button>
+        <button onClick={this.getTimesheets}>Get Timesheets</button>
         <pre>
           <code>{JSON.stringify(this.state.timeSheets, null, 4)}</code>
         </pre>
@@ -40,3 +42,5 @@ class TimeSheetForm extends Component {
     );
   }
 }
+
+export default TimeSheetShow;

@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
-import './ArticleShow.css';
+import './PackageShow.css';
 
-class ArticleShow extends Component {
+class PackageShow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: [],
+      packages: [],
     };
-    this.getArticles = this.getArticles.bind(this);
+    this.getPackages = this.getPackages.bind(this);
   }
 
-  getArticles() {
+  getPackages() {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
-    const url = `${baseUrl}${Organisation}/article`;
+    const url = `${baseUrl}${Organisation}/pr_packages`;
     http.open('GET', url, true);
     http.setRequestHeader('Accept', 'application/json');
     http.setRequestHeader('Authorization', `Bearer ${AccessToken}`);
 
     http.onreadystatechange = () => {
       if (http.readyState === 4 && http.status === 200) {
-        const articles = JSON.parse(http.responseText);
+        const packages = JSON.parse(http.responseText);
         this.setState({
-          articles,
+          packages,
         });
       }
     };
@@ -34,13 +34,13 @@ class ArticleShow extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.getArticles}>Get Articles</button>
+        <button onClick={this.getPackages}>Get Packages</button>
         <pre>
-          <code>{JSON.stringify(this.state.articles, null, 4)}</code>
+          <code>{JSON.stringify(this.state.packages, null, 4)}</code>
         </pre>
       </div>
     );
   }
 }
 
-export default ArticleShow;
+export default PackageShow;
