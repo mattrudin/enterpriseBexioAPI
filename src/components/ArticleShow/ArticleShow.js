@@ -7,10 +7,9 @@ class ArticleShow extends Component {
     this.state = {
       articles: [],
     };
-    this.getArticles = this.getArticles.bind(this);
   }
 
-  getArticles() {
+  getArticles = () => {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';

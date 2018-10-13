@@ -7,10 +7,9 @@ class TimeSheetShow extends Component {
     this.state = {
       timeSheets: [],
     };
-    this.getTimesheets = this.getTimesheets.bind(this);
   }
 
-  getTimesheets() {
+  getTimesheets = () => {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';

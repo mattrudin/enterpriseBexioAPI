@@ -7,10 +7,9 @@ class ProjectShow extends Component {
     this.state = {
       projects: [],
     };
-    this.getProjects = this.getProjects.bind(this);
   }
 
-  getProjects() {
+  getProjects = () => {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';

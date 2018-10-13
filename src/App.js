@@ -19,7 +19,6 @@ class App extends Component {
       AccessToken: '',
       Organisation: '',
     };
-    this.goLogin = this.goLogin.bind(this);
   }
 
   componentDidMount() {
@@ -68,7 +67,7 @@ class App extends Component {
     http.send(params);
   }
 
-  goLogin() {
+  goLogin= () => {
     const http = new XMLHttpRequest();
     const url = 'https://office.bexio.com/oauth/authorize';
     const redirect_uri = 'http://localhost:3000/';
@@ -107,38 +106,20 @@ class App extends Component {
   }
 
   render() {
+    const { AccessToken, Organisation, Login } = this.state;
     return (
       <div className="App">
-        <button className="button" type="button" onClick={this.goLogin}>
-          Login to Bexio
-        </button>
-        <div className="container">
-          <ArticleShow
-            AccessToken={this.state.AccessToken}
-            Organisation={this.state.Organisation}
-          />
-          <ArticleForm
-            AccessToken={this.state.AccessToken}
-            Organisation={this.state.Organisation}
-          />
-          <TimeSheetShow
-            AccessToken={this.state.AccessToken}
-            Organisation={this.state.Organisation}
-          />
-          <TimeShetForm
-            AccessToken={this.state.AccessToken}
-            Organisation={this.state.Organisation}
-          />
-          <UserShow AccessToken={this.state.AccessToken} Organisation={this.state.Organisation} />
-          <ProjectShow
-            AccessToken={this.state.AccessToken}
-            Organisation={this.state.Organisation}
-          />
-          <PackageShow
-            AccessToken={this.state.AccessToken}
-            Organisation={this.state.Organisation}
-          />
-        </div>
+        {Login ? null : ( <button className="button" type="button" onClick={this.goLogin}>Login to Bexio</button>) }
+
+        {Login ? (  <div className="container">
+                      <ArticleShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <ArticleForm AccessToken={AccessToken} Organisation={Organisation} />
+                      <TimeSheetShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <TimeShetForm AccessToken={AccessToken} Organisation={Organisation} />
+                      <UserShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <ProjectShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <PackageShow AccessToken={AccessToken} Organisation={Organisation} />
+                    </div>) : null}
       </div>
     );
   }
