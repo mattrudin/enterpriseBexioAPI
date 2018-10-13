@@ -7,10 +7,9 @@ class UserShow extends Component {
     this.state = {
       users: [],
     };
-    this.getUsers = this.getUsers.bind(this);
   }
 
-  getUsers() {
+  getUsers = () => {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';

@@ -7,10 +7,9 @@ class PackageShow extends Component {
     this.state = {
       packages: [],
     };
-    this.getPackages = this.getPackages.bind(this);
   }
 
-  getPackages() {
+  getPackages = () => {
     const { AccessToken, Organisation } = this.props;
     const http = new XMLHttpRequest();
     const baseUrl = 'https://office.bexio.com/api2.php/';
