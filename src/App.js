@@ -7,14 +7,17 @@ import TimeShetForm from './components/TimeSheetForm/TimeSheetForm';
 import UserShow from './components/UserShow/UserShow';
 import ProjectShow from './components/ProjectShow/ProjectShow';
 import PackageShow from './components/PackageShow/PackageShow';
+import ClientServiceShow from './components/ClientServiceShow/ClientServiceShow';
+import ContactShow from './components/ContactShow/ContactShow';
+import TaskShow from './components/TaskShow/TaskShow';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       Login: false,
-      ClientID: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-      ClientSecret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      ClientID: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      ClientSecret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       State: '',
       AccessToken: '',
       Organisation: '',
@@ -72,7 +75,7 @@ class App extends Component {
     const url = 'https://office.bexio.com/oauth/authorize';
     const redirect_uri = 'http://localhost:3000/';
     const state = this.generateState();
-    const scope = 'article_show monitoring_show project_show'; // package_show not available
+    const scope = 'article_show monitoring_show project_show contact_show task_show'; // package_show not available
 
     const params = `client_id=${
       this.state.ClientID
@@ -119,6 +122,9 @@ class App extends Component {
                       <UserShow AccessToken={AccessToken} Organisation={Organisation} />
                       <ProjectShow AccessToken={AccessToken} Organisation={Organisation} />
                       <PackageShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <ClientServiceShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <ContactShow AccessToken={AccessToken} Organisation={Organisation} />
+                      <TaskShow AccessToken={AccessToken} Organisation={Organisation} />
                     </div>) : null}
       </div>
     );
