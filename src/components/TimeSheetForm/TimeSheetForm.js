@@ -1,30 +1,54 @@
 import React, { Component } from 'react';
+import { Bexio } from '../../App';
 import './TimeSheetForm.css';
 
+//This form needs the following:
+//allowable_bill / boolean -->BexioAPI
+//tracking --> BexioAPI
+//  "tracking": {
+//    "type": "duration",
+//    "date": "2013-02-01",
+//    "duration": "2:30"
+//  }
+
 class TimeSheetForm extends Component {
-  postTimesheets() {
-    /*     const http = new XMLHttpRequest();
-    const baseUrl = 'https://office.bexio.com/api2.php/';
-    const url = `${baseUrl}${this.state.Organisation}/timesheet`;
-    http.open('GET', url, true);
-    http.setRequestHeader('Accept', 'application/json');
-    http.setRequestHeader('Authorization', `Bearer ${this.state.AccessToken}`);
+  state = {
+    userNames: [],
+    projectNos: [],
+    services: [],
+    userName: '',
+    projectNo: '',
+    service: '',
+    hours: ''
+  }
 
-    http.onreadystatechange = function() {
-      if (http.readyState === 4 && http.status === 200) {
-        const timeSheets = JSON.parse(http.responseText);
-        console.log(timeSheets);
-      }
-    };
-
-    http.send(); */
+  componentDidMount() {
+    Bexio.getData(); //user
+    Bexio.getData(); //pr_project
+    Bexio.getData(); //client_service
   }
 
   render() {
     return (
-      <div>
-        <p>post timesheets</p>
-      </div>
+      <form onSubmit={}>
+        <label>
+          User Name:
+          <input type="text" value={this.state.userName} onChange={} />
+        </label>
+        <label>
+          Project No:
+          <input type="text" value={this.state.projectNo} onChange={} />
+        </label>
+        <label>
+          Service:
+          <input type="text" value={this.state.service} onChange={} />
+        </label>
+        <label>
+          Hours:
+          <input type="number" value={this.state.hours} onChange={} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
     );
   }
 }
