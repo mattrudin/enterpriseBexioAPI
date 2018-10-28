@@ -1,0 +1,14 @@
+.timeSheet-control {
+    display: flex;
+    height: 100px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.Spec-Input {
+    width: 250px;
+}
+
+.Time-Input {
+    width: 150px;
+}
