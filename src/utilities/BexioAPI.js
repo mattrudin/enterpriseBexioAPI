@@ -113,7 +113,6 @@ class BexioAPI {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             });
-            //new function: check if timesheets are according specification
             const data = JSON.stringify(timesheets);
             const initObject = {
                 method: 'POST', body: data, headers: reqHeader

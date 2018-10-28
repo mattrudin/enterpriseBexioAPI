@@ -2,17 +2,7 @@ import React, { Component } from 'react';
 import { Bexio } from '../../App';
 import './TimeSheetForm.css';
 import Select from 'react-select';
-import { rawUserToUsername, rawProjectToProject, rawServiceToService, workingTime } from './utilities';
-
-
-//This form needs the following:
-//allowable_bill / boolean -->BexioAPI
-//tracking --> BexioAPI
-//  "tracking": {
-//    "type": "duration",
-//    "date": "2013-02-01",
-//    "duration": "2:30"
-//  }
+import { rawUserToUsername, rawProjectToProject, rawServiceToService, timeConverter, currentDate, workingTime } from './utilities';
 
 class TimeSheetForm extends Component {
     state = {
@@ -26,12 +16,13 @@ class TimeSheetForm extends Component {
       selectedUser: null,
       selectedProject: null,
       selectedService: null,
-      Montag: null,
-      Dienstag: null,
-      Mittwoch: null,
-      Donnerstag: null,
-      Freitag: null,
-      Samstag: null,
+      Montag: 0,
+      Dienstag: 0,
+      Mittwoch: 0,
+      Donnerstag: 0,
+      Freitag: 0,
+      Samstag: 0,
+      weekLoadInMinutes: '',
     }
 
   async handleGetData() {
@@ -57,27 +48,49 @@ class TimeSheetForm extends Component {
     this.setState({ selectedService });
   }
 
-  handleWeekdayInput = (weekday) => {
-    this.setState({weekday})
-  }
-
   handleMontag = (Montag) => {
-    this.setState({Montag})
+    this.setState({Montag: Montag.value}, () => this.calculateWeekLoad())
   }
   handleDienstag = (Dienstag) => {
-    this.setState({Dienstag})
+    this.setState({Dienstag: Dienstag.value}, () => this.calculateWeekLoad())
   }
   handleMittwoch = (Mittwoch) => {
-    this.setState({Mittwoch})
+    this.setState({Mittwoch: Mittwoch.value}, () => this.calculateWeekLoad())
   }
   handleDonnerstag = (Donnerstag) => {
-    this.setState({Donnerstag})
+    this.setState({Donnerstag: Donnerstag.value}, () => this.calculateWeekLoad())
   }
   handleFreitag = (Freitag) => {
-    this.setState({Freitag})
+    this.setState({Freitag: Freitag.value}, () => this.calculateWeekLoad())
   }
   handleSamstag = (Samstag) => {
-    this.setState({Samstag})
+    this.setState({Samstag: Samstag.value}, () => this.calculateWeekLoad());
+  }
+
+  calculateWeekLoad = () => {
+    const weekLoadInMinutes = this.state.Montag + this.state.Dienstag + this.state.Mittwoch + this.state.Donnerstag + this.state.Freitag + this.state.Samstag;
+    this.setState({
+      weekLoadInMinutes
+    })
+  }
+
+  handleSendTimesheet = () => {
+    const { selectedUser, selectedService, selectedProject } = this.state;
+    const dateString = currentDate();
+    const durationInHours = timeConverter(this.state.weekLoadInMinutes); 
+    const timeSheet = [{
+      "user_id": selectedUser.value,
+      "client_service_id": selectedService.value,
+      "allowable_bill": false,
+      "tracking": {
+        "type": "duration",
+        "date": dateString,
+        "duration": durationInHours
+      },
+      "pr_project_id": selectedProject.value
+    }];
+    console.log(timeSheet);
+    //Bexio.postTimetracking(timeSheet);
   }
 
   render() {
@@ -128,7 +141,7 @@ class TimeSheetForm extends Component {
                 value={Dienstag}
                 onChange={this.handleDienstag}
                 options={workingTime}
-                />
+              />
           </label> 
           <label className="Time-Input">
             Mittwoch:
@@ -136,7 +149,7 @@ class TimeSheetForm extends Component {
                 value={Mittwoch}
                 onChange={this.handleMittwoch}
                 options={workingTime}
-                />
+              />
           </label> 
           <label className="Time-Input">
             Donnerstag:
@@ -144,7 +157,7 @@ class TimeSheetForm extends Component {
                 value={Donnerstag}
                 onChange={this.handleDonnerstag}
                 options={workingTime}
-                />
+              />
           </label> 
           <label className="Time-Input">
             Freitag:
@@ -152,7 +165,7 @@ class TimeSheetForm extends Component {
                 value={Freitag}
                 onChange={this.handleFreitag}
                 options={workingTime}
-                />
+              />
           </label> 
           <label className="Time-Input">
             Samstag:
@@ -160,9 +173,19 @@ class TimeSheetForm extends Component {
                 value={Samstag}
                 onChange={this.handleSamstag}
                 options={workingTime}
-                />
+              />
           </label>   
         </div>
+        <button className="button" type="button" onClick={() => this.handleSendTimesheet()}>
+            Send Timesheet to Bexio
+        </button>
+        <p>Montag: {this.state.Montag}</p>
+        <p>Dienstag: {this.state.Dienstag}</p>
+        <p>Mittwoch: {this.state.Mittwoch}</p>
+        <p>Donnerstag: {this.state.Donnerstag}</p>
+        <p>Freitag: {this.state.Freitag}</p>
+        <p>Samstag: {this.state.Samstag}</p>
+        <p>Gesamte Woche: {this.state.weekLoadInMinutes}</p>
       </div>
     );
   }
