@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Bexio } from '../../App';
 import './TimeSheetForm.css';
+import Select from 'react-select';
+import { rawUserToUsername } from './utilities';
 
 //This form needs the following:
 //allowable_bill / boolean -->BexioAPI
@@ -19,36 +21,35 @@ class TimeSheetForm extends Component {
     userName: '',
     projectNo: '',
     service: '',
-    hours: ''
+    hours: '',
+    selectedUser: null,
   }
 
-  componentDidMount() {
-    Bexio.getData(); //user
-    Bexio.getData(); //pr_project
-    Bexio.getData(); //client_service
+  async componentDidMount() {
+    const users = await Bexio.getData('users');
+    this.setState({
+      userNames: [...users]
+    });
+
+    //Bexio.getData(); //pr_project
+    //Bexio.getData(); //client_service
+  }
+
+  handleUserChange = (selectedUser) => {
+    this.setState({ selectedUser });
   }
 
   render() {
+    const { selectedUser } = this.state;
     return (
-      <form onSubmit={}>
-        <label>
-          User Name:
-          <input type="text" value={this.state.userName} onChange={} />
-        </label>
-        <label>
-          Project No:
-          <input type="text" value={this.state.projectNo} onChange={} />
-        </label>
-        <label>
-          Service:
-          <input type="text" value={this.state.service} onChange={} />
-        </label>
-        <label>
-          Hours:
-          <input type="number" value={this.state.hours} onChange={} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <div>
+        <p>User</p>
+          <Select
+          value={selectedUser}
+          onChange={this.handleUserChange}
+          options={options}
+          />
+      </div>
     );
   }
 }

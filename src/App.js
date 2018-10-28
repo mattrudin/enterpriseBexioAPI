@@ -9,7 +9,7 @@ const config = {
   clientID: client_ID,
   clientSecret: client_secret,
   redirectURI: 'http://localhost:3000/',
-  scopes: 'article_show monitoring_show project_show',
+  scopes: 'article_show monitoring_show monitoring_edit project_show',
 };
 
 export const Bexio = new BexioAPI(config);
