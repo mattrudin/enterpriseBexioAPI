@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Bexio } from '../../App';
 import './TimeSheetForm.css';
 import Select from 'react-select';
-import { rawUserToUsername, rawProjectToProject, rawServiceToService } from './utilities';
+import { rawUserToUsername, rawProjectToProject, rawServiceToService, workingTime } from './utilities';
 
 
 //This form needs the following:
@@ -15,9 +15,7 @@ import { rawUserToUsername, rawProjectToProject, rawServiceToService } from './u
 //  }
 
 class TimeSheetForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+    state = {
       userNames: [],
       projectNos: [],
       services: [],
@@ -28,10 +26,13 @@ class TimeSheetForm extends Component {
       selectedUser: null,
       selectedProject: null,
       selectedService: null,
+      Montag: null,
+      Dienstag: null,
+      Mittwoch: null,
+      Donnerstag: null,
+      Freitag: null,
+      Samstag: null,
     }
-
-    this.handleWeekdayInput = this.handleWeekdayInput.bind(this);
-  }
 
   async handleGetData() {
     const userNames = rawUserToUsername(await Bexio.getData('users'));
@@ -56,72 +57,112 @@ class TimeSheetForm extends Component {
     this.setState({ selectedService });
   }
 
-  handleWeekdayInput(weekday, event) {
-    switch(weekday) {
-      case 'Montag':
-        this.setState({Montag: event.target.value});
-        break;
-      case 'Dienstag':
-        this.setState({Dienstag: event.target.value});
-        break;
-      case 'Mittwoch':
-        this.setState({Mittwoch: event.target.value});
-        break;
-      case 'Donnerstag':
-        this.setState({Donnerstag: event.target.value});
-        break;
-      case 'Freitag':
-        this.setState({Freitag: event.target.value});
-        break;
-      case 'Samstag':
-        this.setState({Samstag: event.target.value});
-        break;
-      default:
-        alert('No day provided');
-    }
+  handleWeekdayInput = (weekday) => {
+    this.setState({weekday})
+  }
+
+  handleMontag = (Montag) => {
+    this.setState({Montag})
+  }
+  handleDienstag = (Dienstag) => {
+    this.setState({Dienstag})
+  }
+  handleMittwoch = (Mittwoch) => {
+    this.setState({Mittwoch})
+  }
+  handleDonnerstag = (Donnerstag) => {
+    this.setState({Donnerstag})
+  }
+  handleFreitag = (Freitag) => {
+    this.setState({Freitag})
+  }
+  handleSamstag = (Samstag) => {
+    this.setState({Samstag})
   }
 
   render() {
     const { selectedUser, userNames, selectedProject, projectNos, selectedService, services } = this.state;
-    const weekDays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
-    const timeInputs = weekDays.map(weekday => { return (
-      <label key={weekday}>
-        {weekday}:
-        <input type="text" value={this.state.weekday} onChange={(event) => this.handleWeekdayInput(weekday, event)} />
-      </label>
-    )
-    })
+    const { Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag } = this.state;
   
     return (
       <div>
         <button className="button" type="button" onClick={() => this.handleGetData()}>
             Get data from Bexio
         </button>
-        <label>
-          <p>User</p>
+        <div className="timeSheet-control">
+          <label className="Spec-Input">
+              User
+              <Select
+              value={selectedUser}
+              onChange={this.handleUserChange}
+              options={userNames}
+              />
+          </label>
+          <label className="Spec-Input">
+            Project No.
             <Select
-            value={selectedUser}
-            onChange={this.handleUserChange}
-            options={userNames}
+            value={selectedProject}
+            onChange={this.handleProjectChange}
+            options={projectNos}
             />
-        </label>
-        <label>
-          <p>Project No.</p>
+          </label>
+          <label className="Spec-Input">
+            Service
+            <Select
+            value={selectedService}
+            onChange={this.handleServiceChange}
+            options={services}
+            />
+          </label>
+          <label className="Time-Input">
+          Montag:
           <Select
-          value={selectedProject}
-          onChange={this.handleProjectChange}
-          options={projectNos}
-          />
-        </label>
-        <label>
-          <p>Service</p>
-          <Select
-          value={selectedService}
-          onChange={this.handleServiceChange}
-          options={services}
-          />
-        </label>
-        {timeInputs}        
+              value={Montag}
+              onChange={this.handleMontag}
+              options={workingTime}
+              />
+          </label> 
+          <label className="Time-Input">
+            Dienstag:
+            <Select
+                value={Dienstag}
+                onChange={this.handleDienstag}
+                options={workingTime}
+                />
+          </label> 
+          <label className="Time-Input">
+            Mittwoch:
+            <Select
+                value={Mittwoch}
+                onChange={this.handleMittwoch}
+                options={workingTime}
+                />
+          </label> 
+          <label className="Time-Input">
+            Donnerstag:
+            <Select
+                value={Donnerstag}
+                onChange={this.handleDonnerstag}
+                options={workingTime}
+                />
+          </label> 
+          <label className="Time-Input">
+            Freitag:
+            <Select
+                value={Freitag}
+                onChange={this.handleFreitag}
+                options={workingTime}
+                />
+          </label> 
+          <label className="Time-Input">
+            Samstag:
+            <Select
+                value={Samstag}
+                onChange={this.handleSamstag}
+                options={workingTime}
+                />
+          </label>   
+        </div>
       </div>
     );
   }

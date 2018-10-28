@@ -17,7 +17,7 @@ export const Bexio = new BexioAPI(config);
 
 class App extends Component {
   state = {
-    Login: true, //<----------------------------------------------------------------------- false
+    Login: false, //<----------------------------------------------------------------------- can be set to true for development
   }
   componentDidMount() {
     Bexio.callback();
