@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import BexioAPI from './utilities/BexioAPI';
+import { client_ID, client_secret } from './.env_data'; // hidden
+
 import TimeShetForm from './components/TimeSheetForm/TimeSheetForm';
 
 const config = {
-  clientID: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  clientSecret: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+  clientID: client_ID,
+  clientSecret: client_secret,
   redirectURI: 'http://localhost:3000/',
   scopes: 'article_show monitoring_show project_show',
 };
