@@ -78,7 +78,7 @@ class TimeSheetForm extends Component {
     const { selectedUser, selectedService, selectedProject } = this.state;
     const dateString = currentDate();
     const durationInHours = timeConverter(this.state.weekLoadInMinutes); 
-    const timeSheet = [{
+    const timeSheet = {
       "user_id": selectedUser.value,
       "client_service_id": selectedService.value,
       "allowable_bill": false,
@@ -88,9 +88,8 @@ class TimeSheetForm extends Component {
         "duration": durationInHours
       },
       "pr_project_id": selectedProject.value
-    }];
-    console.log(timeSheet);
-    //Bexio.postTimetracking(timeSheet);
+    };
+    Bexio.postTimetracking(timeSheet);
   }
 
   render() {
@@ -128,12 +127,12 @@ class TimeSheetForm extends Component {
             />
           </label>
           <label className="Time-Input">
-          Montag:
-          <Select
-              value={Montag}
-              onChange={this.handleMontag}
-              options={workingTime}
-              />
+            Montag:
+            <Select
+                value={Montag}
+                onChange={this.handleMontag}
+                options={workingTime}
+                />
           </label> 
           <label className="Time-Input">
             Dienstag:

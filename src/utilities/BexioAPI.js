@@ -1,5 +1,5 @@
 import SetInterval from 'set-interval';
-import { generateState, resourceReducer, checkTimesheets } from './utilities';
+import { generateState, resourceReducer } from './utilities';
 
 class BexioAPI {
     constructor({clientID, clientSecret, redirectURI, scopes}) {
@@ -104,8 +104,8 @@ class BexioAPI {
         }
     }
 
-    postTimetracking = (timesheets) => { //resource is hardcoded as "timesheet"; scope: monitoring_edit
-        if (Array.isArray(timesheets) && checkTimesheets(timesheets)) {
+    postTimetracking = (timesheet) => { //resource is hardcoded as "timesheet"; scope: monitoring_edit
+        if (typeof timesheet === 'object') {
             const { accessToken, organisation } = this.data;
             const baseUrl = 'https://office.bexio.com/api2.php/';
             const url = `${baseUrl}${organisation}/timesheet`;
@@ -113,11 +113,10 @@ class BexioAPI {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             });
-            const data = JSON.stringify(timesheets);
+            const data = JSON.stringify(timesheet);
             const initObject = {
                 method: 'POST', body: data, headers: reqHeader
             };
-    
             fetch(url, initObject)
                 .then( response => {
                     return alert('Timesheets successfully uploaded!', response.json());
