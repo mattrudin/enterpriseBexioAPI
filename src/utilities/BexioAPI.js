@@ -105,7 +105,7 @@ class BexioAPI {
     }
 
     postTimetracking = (timesheets) => { //resource is hardcoded as "timesheet"; scope: monitoring_edit
-        if (Object.isArray(timesheets) && checkTimesheets(timesheets)) {
+        if (Array.isArray(timesheets) && checkTimesheets(timesheets)) {
             const { accessToken, organisation } = this.data;
             const baseUrl = 'https://office.bexio.com/api2.php/';
             const url = `${baseUrl}${organisation}/timesheet`;

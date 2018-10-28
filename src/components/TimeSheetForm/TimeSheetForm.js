@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Bexio } from '../../App';
 import './TimeSheetForm.css';
 import Select from 'react-select';
-import { rawUserToUsername } from './utilities';
-import SetInterval from 'set-interval'
+import { rawUserToUsername, rawProjectToProject, rawServiceToService } from './utilities';
 
 
 //This form needs the following:
@@ -28,15 +27,16 @@ class TimeSheetForm extends Component {
   }
 
   async handleGetData() {
-    const users = await Bexio.getData('users');
-    const projects = await Bexio.getData('projects');
-    const client_services = await Bexio.getData('business activities');
+    const userNames = rawUserToUsername(await Bexio.getData('users'));
+    const projectNos = rawProjectToProject(await Bexio.getData('projects'));
+    const services = rawServiceToService(await Bexio.getData('business activities'));
 
     this.setState({
-      userNames: [...users],
-      projectNos: [...projects],
-      services: [...client_services]
+      userNames,
+      projectNos,
+      services
     });
+    console.log(this.state.userNames, this.state.projectNos, this.state.services);
   }
 
   handleUserChange = (selectedUser) => {
