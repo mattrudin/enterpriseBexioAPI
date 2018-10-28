@@ -3,6 +3,8 @@ import { Bexio } from '../../App';
 import './TimeSheetForm.css';
 import Select from 'react-select';
 import { rawUserToUsername } from './utilities';
+import SetInterval from 'set-interval'
+
 
 //This form needs the following:
 //allowable_bill / boolean -->BexioAPI
@@ -25,14 +27,16 @@ class TimeSheetForm extends Component {
     selectedUser: null,
   }
 
-  async componentDidMount() {
+  async handleGetData() {
     const users = await Bexio.getData('users');
-    this.setState({
-      userNames: [...users]
-    });
+    const projects = await Bexio.getData('projects');
+    const client_services = await Bexio.getData('business activities');
 
-    //Bexio.getData(); //pr_project
-    //Bexio.getData(); //client_service
+    this.setState({
+      userNames: [...users],
+      projectNos: [...projects],
+      services: [...client_services]
+    });
   }
 
   handleUserChange = (selectedUser) => {
@@ -43,11 +47,14 @@ class TimeSheetForm extends Component {
     const { selectedUser } = this.state;
     return (
       <div>
+        <button className="button" type="button" onClick={() => this.handleGetData()}>
+            Get data from Bexio
+        </button>
         <p>User</p>
           <Select
           value={selectedUser}
           onChange={this.handleUserChange}
-          options={options}
+          options={this.state.userNames}
           />
       </div>
     );

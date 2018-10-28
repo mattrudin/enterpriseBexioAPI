@@ -8,7 +8,9 @@ class BexioAPI {
             clientSecret: clientSecret,
             redirectURI: redirectURI,
             scopes: scopes,
-            state: ''
+            state: '',
+            accessToken: '',
+            organisation: '',
         }
     }
 
@@ -37,6 +39,7 @@ class BexioAPI {
                 localStorage.clear();
                 const code = isCode[1];
                 this.getAccessToken(code);
+                localStorage.setItem('Login', true); //for further usage
             }
         }
     }
