@@ -24,6 +24,8 @@ class TimeSheetForm extends Component {
     service: '',
     hours: '',
     selectedUser: null,
+    selectedProject: null,
+    selectedService: null,
   }
 
   async handleGetData() {
@@ -35,16 +37,24 @@ class TimeSheetForm extends Component {
       userNames,
       projectNos,
       services
-    });
-    console.log(this.state.userNames, this.state.projectNos, this.state.services);
+    }, alert('Data received!'));
   }
 
   handleUserChange = (selectedUser) => {
     this.setState({ selectedUser });
   }
 
+  handleProjectChange = (selectedProject) => {
+    this.setState({ selectedProject });
+  }
+
+  handleServiceChange = (selectedService) => {
+    this.setState({ selectedService });
+  }
+
   render() {
-    const { selectedUser } = this.state;
+    const { selectedUser, userNames, selectedProject, projectNos, selectedService, services } = this.state;
+  
     return (
       <div>
         <button className="button" type="button" onClick={() => this.handleGetData()}>
@@ -54,7 +64,19 @@ class TimeSheetForm extends Component {
           <Select
           value={selectedUser}
           onChange={this.handleUserChange}
-          options={this.state.userNames}
+          options={userNames}
+          />
+          <p>Project No.</p>
+          <Select
+          value={selectedProject}
+          onChange={this.handleProjectChange}
+          options={projectNos}
+          />
+          <p>Service</p>
+          <Select
+          value={selectedService}
+          onChange={this.handleServiceChange}
+          options={services}
           />
       </div>
     );

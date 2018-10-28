@@ -3,7 +3,7 @@ export function rawUserToUsername(userArray) {
   if (Array.isArray(userArray)) {
     userNames = userArray.map(user => {
       const firstLastName = `${user.firstname} ${user.lastname}`;
-      return [user.id, firstLastName];
+      return { value: user.id, label: firstLastName };
     });
   }
   return userNames;
@@ -12,7 +12,7 @@ export function rawUserToUsername(userArray) {
 export function rawProjectToProject(projectArray) {
   let projectNames;
   if (Array.isArray(projectArray)) {
-    projectNames = projectArray.map(project => [project.id, project.name]);
+    projectNames = projectArray.map(project => ({ value: project.id, label: project.name }));
   }
   return projectNames;
 }
@@ -20,7 +20,7 @@ export function rawProjectToProject(projectArray) {
 export function rawServiceToService(serviceArray) {
   let serviceNames;
   if (Array.isArray(serviceArray)) {
-    serviceNames = serviceArray.map(service => [service.id, service.name]);
+    serviceNames = serviceArray.map(service => ({ value: service.id, label: service.name }));
   }
   return serviceNames;
 }
