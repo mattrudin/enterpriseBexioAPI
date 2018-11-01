@@ -43,3 +43,15 @@ export function checkTimesheet(timesheet) {
   const isVerified = keys.includes('user_id', 'client_service_id', 'allowable_bill', 'tracking');
   return isVerified;
 }
+
+export function checkProject(project) {
+  const keys = Object.keys(project);
+  const isVerified = keys.includes(
+    'contact_id',
+    'name',
+    'pr_project_type_id',
+    'pr_state_id',
+    'user_id'
+  );
+  return isVerified;
+}

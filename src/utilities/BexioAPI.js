@@ -1,4 +1,4 @@
-import { generateState, resourceReducer, checkTimesheet } from './utilities';
+import { generateState, resourceReducer, checkTimesheet, checkProject } from './utilities';
 import SetInterval from 'set-interval';
 
 class BexioAPI {
@@ -151,7 +151,7 @@ class BexioAPI {
         }
     }
 
-    postItem = (item) => { //resource is hardcoded ad "item"; scope: article_edit
+    postItem = (item) => { //resource is hardcoded as "item"; scope: article_edit
         if (typeof item === 'object') {
             const { accessToken, organisation } = this.state;
             const baseUrl = 'https://office.bexio.com/api2.php/';
@@ -173,6 +173,31 @@ class BexioAPI {
                 });
         } else {
             alert('Error: Please provide an object into this function.');
+        }
+    }
+
+    postProject = (project) => { //resource is hardcoded as "project"; scope: project_edit
+        if (typeof project === 'object' && checkProject(project)) {
+            const { accessToken, organisation } = this.state;
+            const baseUrl = 'https://office.bexio.com/api2.php/';
+            const url = `${baseUrl}${organisation}/pr_project`;
+            const reqHeader = new Headers({
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            });
+            const data = JSON.stringify(project);
+            const initObject = {
+                method: 'POST', body: data, headers: reqHeader
+            };
+            fetch(url, initObject)
+                .then( response => {
+                    return alert('Timesheets successfully uploaded!', response.json());
+                })
+                .catch(err => {
+                    alert("Error: Could not send data!", err);
+                });
+        } else {
+            alert('Error: Please provide an object with the required parameters into this function.');
         }
     }
 }
