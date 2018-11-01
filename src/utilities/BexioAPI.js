@@ -38,9 +38,10 @@ class BexioAPI {
             const stateSent = localStorage.getItem('state');
             if(stateReceived === stateSent) {
                 localStorage.clear();
+                window.history.pushState('Access Token', null, '/');
                 const code = isCode[1];
                 this.getAccessToken(code);
-                localStorage.setItem('Login', true); //for further usage
+                localStorage.setItem('Login', true); //for connection between the API and the actual app
             }
         }
     }
