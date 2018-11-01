@@ -1,4 +1,4 @@
-import { generateState, resourceReducer, checkTimesheet, checkProject } from './utilities';
+import { generateState, resourceReducer, checkTimesheet, checkProject, postDataReducer } from './utilities';
 import SetInterval from 'set-interval';
 
 class BexioAPI {
@@ -118,11 +118,28 @@ class BexioAPI {
         return data;
     }
 
-    postData = (resource) => {
-        if (typeof resource === 'string') {
-            //POST data
-        } else {
-            alert('Error: Please provide a string into this function.')
+    postData = (resource, data) => { //shall replace all other postXXX methods
+        const resourceURL = resourceReducer(resource);
+        const isVerified = postDataReducer(resource, data);
+        if (isVerified) {
+            const { accessToken, organisation } = this.state;
+            const baseUrl = 'https://office.bexio.com/api2.php/';
+            const url = `${baseUrl}${organisation}/${resourceURL}`;
+            const reqHeader = new Headers({
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            });
+            const dataToPost = JSON.stringify(data);
+            const initObject = {
+                method: 'POST', body: dataToPost, headers: reqHeader
+            };
+            fetch(url, initObject)
+                .then( response => {
+                    return alert('Timesheets successfully uploaded!', response.json());
+                })
+                .catch(err => {
+                    alert("Error: Could not send data!", err);
+                });
         }
     }
 
