@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import BexioAPI from './utilities/BexioAPI';
-import SetInterval from 'set-interval'
 import { client_ID, client_secret } from './.env_data'; // hidden
+import SetInterval from 'set-interval';
 
 import TimeShetForm from './components/TimeSheetForm/TimeSheetForm';
 
@@ -19,6 +19,8 @@ class App extends Component {
   state = {
     Login: false, //<----------------------------------------------------------------------- can be set to true for development
   }
+
+  //old concept
   componentDidMount() {
     Bexio.callback();
     SetInterval.start(() => {
@@ -32,6 +34,12 @@ class App extends Component {
       }
     }, 500, 'checkLogin')
   }
+  //new concept
+  /* async componentDidMount() {
+    await Bexio.callback().then(this.setState({
+      Login: true
+    }));
+  } */
 
   render() {
     const { Login } = this.state;

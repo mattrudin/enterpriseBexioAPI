@@ -1,9 +1,9 @@
-import SetInterval from 'set-interval';
 import { generateState, resourceReducer, checkTimesheet } from './utilities';
+import SetInterval from 'set-interval';
 
 class BexioAPI {
     constructor({clientID, clientSecret, redirectURI, scopes}) {
-        this.data = {
+        this.state = {
             clientID: clientID,
             clientSecret: clientSecret,
             redirectURI: redirectURI,
@@ -14,6 +14,7 @@ class BexioAPI {
         }
     }
 
+    //old concept
     callback = () => {
         SetInterval.start(this.getAccess, 500,'callback');
     }
@@ -21,9 +22,9 @@ class BexioAPI {
     login = () => {
         // no 'access-control-allow-origin' header is present on the requested resource.
         const baseUrl = 'https://office.bexio.com/oauth/authorize?';
-        this.data.state = generateState();
-        localStorage.setItem('state', this.data.state);
-        const params = `client_id=${this.data.clientID}&redirect_uri=${this.data.redirectURI}&state=${this.data.state}&scope=${this.data.scopes}`;
+        this.state.state = generateState();
+        localStorage.setItem('state', this.state.state);
+        const params = `client_id=${this.state.clientID}&redirect_uri=${this.state.redirectURI}&state=${this.state.state}&scope=${this.state.scopes}`;
         const url = `${baseUrl}${params}`;
 
         window.location = `${url}`;
@@ -43,10 +44,30 @@ class BexioAPI {
             }
         }
     }
+    //new concept
+    /* async callback() {
+        const code = await (window.location.href.match(/code=([^&]*)/)[1] !== null);
+        const stateReceived = window.location.href.match(/state=([^&]*)/)[1];
+        const { state } = this.state;
+        if(stateReceived === state) {
+            this.getAccessToken(code);
+        }
+    }
+
+    async login() {
+        // no 'access-control-allow-origin' header is present on the requested resource.
+        const baseUrl = 'https://office.bexio.com/oauth/authorize?';
+        this.state.state = await generateState();
+        const params = `client_id=${this.state.clientID}&redirect_uri=${this.state.redirectURI}&state=${this.state.state}&scope=${this.state.scopes}`;
+        const url = `${baseUrl}${params}`;
+
+        window.location = `${url}`;
+    } */
+
 
     getAccessToken = (code) => {
         const baseUrl = 'https://office.bexio.com/oauth/access_token?';
-        const params = `client_id=${this.data.clientID}&redirect_uri=${this.data.redirectURI}&client_secret=${this.data.clientSecret}&code=${code}`;
+        const params = `client_id=${this.state.clientID}&redirect_uri=${this.state.redirectURI}&client_secret=${this.state.clientSecret}&code=${code}`;
         const url = `${baseUrl}${params}`;
         const reqHeader = new Headers({
             'Content-type': 'application/x-www-form-urlencoded',
@@ -60,8 +81,8 @@ class BexioAPI {
                 return response.json();
             })
             .then( receivedData => {
-                this.data.accessToken = receivedData.access_token;
-                this.data.organisation = receivedData.org;
+                this.state.accessToken = receivedData.access_token;
+                this.state.organisation = receivedData.org;
                 alert('AccessToken successfully received');
             })
             .catch(err => {
@@ -72,7 +93,7 @@ class BexioAPI {
     async getData(resource) {
         let data;
         if (typeof resource === 'string' && !data) {
-            const { accessToken, organisation } = this.data;
+            const { accessToken, organisation } = this.state;
             const baseUrl = 'https://office.bexio.com/api2.php/';
             const resourceText = resourceReducer(resource);
             const url = `${baseUrl}${organisation}/${resourceText}`;
@@ -106,7 +127,7 @@ class BexioAPI {
 
     postTimetracking = (timesheet) => { //resource is hardcoded as "timesheet"; scope: monitoring_edit
         if (typeof timesheet === 'object' && checkTimesheet(timesheet)) {
-            const { accessToken, organisation } = this.data;
+            const { accessToken, organisation } = this.state;
             const baseUrl = 'https://office.bexio.com/api2.php/';
             const url = `${baseUrl}${organisation}/timesheet`;
             const reqHeader = new Headers({
