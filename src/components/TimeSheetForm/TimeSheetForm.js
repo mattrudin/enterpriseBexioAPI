@@ -4,6 +4,10 @@ import './TimeSheetForm.css';
 import Select from 'react-select';
 import { rawUserToUsername, rawProjectToProject, rawServiceToService, timeConverter, currentDate, workingTime } from './utilities';
 
+//TODO:
+// -add contact_id to timesheet
+// contact_id has to be checked between pr_project and contact (see https://docs.bexio.com/resources/)
+
 class TimeSheetForm extends Component {
     state = {
       userNames: [],
