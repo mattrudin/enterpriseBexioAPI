@@ -147,7 +147,32 @@ class BexioAPI {
                     alert("Error: Could not send data!", err);
                 });
         } else {
-            alert('Error: Please provide an array into this function.');
+            alert('Error: Please provide an object into this function.');
+        }
+    }
+
+    postItem = (item) => { //resource is hardcoded ad "item"; scope: article_edit
+        if (typeof item === 'object') {
+            const { accessToken, organisation } = this.state;
+            const baseUrl = 'https://office.bexio.com/api2.php/';
+            const url = `${baseUrl}${organisation}/article`;
+            const reqHeader = new Headers({
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            });
+            const data = JSON.stringify(item);
+            const initObject = {
+                method: 'POST', body: data, headers: reqHeader
+            };
+            fetch(url, initObject)
+                .then( response => {
+                    return alert('Item successfully uploaded!', response.json());
+                })
+                .catch(err => {
+                    alert("Error: Could not send data!", err);
+                });
+        } else {
+            alert('Error: Please provide an object into this function.');
         }
     }
 }
